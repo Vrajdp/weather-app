@@ -6,7 +6,10 @@ export default function SearchBar({ onSearch }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (city) onSearch(city);
+    if (city.trim()) {
+      onSearch(city.trim());
+      setCity('');
+    }
   };
 
   return (
@@ -18,7 +21,10 @@ export default function SearchBar({ onSearch }) {
         placeholder="Enter city name"
         className="border-2 border-gray-300 p-2 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
       />
-      <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white p-2 rounded-r-md transition-colors duration-300">
+      <button
+        type="submit"
+        className="bg-blue-500 hover:bg-blue-700 text-white p-2 rounded-r-md transition-colors duration-300"
+      >
         Search
       </button>
     </form>
