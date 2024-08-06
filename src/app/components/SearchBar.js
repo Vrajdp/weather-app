@@ -1,32 +1,36 @@
 // src/app/components/SearchBar.js
-import { useState } from 'react';
+import React, { useState } from 'react';
 
-export default function SearchBar({ onSearch }) {
+export default function SearchBar({ onSearch, onLocationClick }) {
   const [city, setCity] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSearch = (e) => {
     e.preventDefault();
-    if (city.trim()) {
-      onSearch(city.trim());
-      setCity('');
-    }
+    onSearch(city);
+    setCity('');
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex justify-center mt-6">
+    <div className="flex justify-center items-center mb-6">
       <input
         type="text"
         value={city}
         onChange={(e) => setCity(e.target.value)}
         placeholder="Enter city name"
-        className="border-2 border-gray-300 p-2 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        className="px-4 py-2 border rounded-lg w-2/3"
       />
       <button
-        type="submit"
-        className="bg-blue-500 hover:bg-blue-700 text-white p-2 rounded-r-md transition-colors duration-300"
+        onClick={handleSearch}
+        className="bg-blue-600 text-white px-4 py-2 rounded-lg ml-4 hover:bg-blue-700"
       >
         Search
       </button>
-    </form>
+      <button
+        onClick={onLocationClick}
+        className="bg-green-600 text-white px-4 py-2 rounded-lg ml-4 hover:bg-green-700"
+      >
+        Use Current Location
+      </button>
+    </div>
   );
 }
