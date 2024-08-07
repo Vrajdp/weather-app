@@ -1,3 +1,4 @@
+//NEXT_PUBLIC_OPENWEATHER_API_KEY=317d523e7baf48190e64744267239a4
 'use client';
 
 import React, { useState, useEffect } from 'react';
