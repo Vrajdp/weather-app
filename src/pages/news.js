@@ -1,7 +1,7 @@
 // src/app/pages/News.js
 import { useState, useEffect } from 'react';
 
-export default function news() {
+export default function News() {
   const [newsArticles, setNewsArticles] = useState([]);
 
   useEffect(() => {
