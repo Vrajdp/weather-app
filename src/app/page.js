@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Header from './components/Header';
 import SearchBar from './components/SearchBar';
 import WeatherDetails from './components/WeatherDetails';
-import { fetchWeatherData } from './api/weather'; // Adjust the path if needed
+import { fetchWeatherData } from './api/weather'; // Make sure this path is correct
 
 export default function Page() {
   const [weatherData, setWeatherData] = useState(null);
