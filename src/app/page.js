@@ -6,7 +6,7 @@ import SearchBar from './components/SearchBar';
 import WeatherDetails from './components/WeatherDetails';
 import HourlyForecast from './components/HourlyForecast';
 import DailyForecast from './components/DailyForecast';
-import News from './components/News'; // Import the News component
+import { getWeatherData } from './api/weather';
 
 export default function Page() {
   const [weatherData, setWeatherData] = useState(null);
