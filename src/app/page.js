@@ -1,12 +1,12 @@
+//NEXT_PUBLIC_OPENWEATHER_API_KEY=317d523e7baf48190e64744267239a4
 'use client';
 
 import React, { useState, useEffect } from 'react';
 import Header from './components/Header';
 import SearchBar from './components/SearchBar';
+import WeatherAlert from './components/WeatherAlert';
+import MainWeatherDisplay from './components/MainWeatherDisplay';
 import WeatherDetails from './components/WeatherDetails';
-import HourlyForecast from './components/HourlyForecast';
-import DailyForecast from './components/DailyForecast';
-import { getWeatherData } from './api/weather';
 
 export default function Page() {
   const [weatherData, setWeatherData] = useState(null);
@@ -14,58 +14,49 @@ export default function Page() {
   const [error, setError] = useState('');
   const [isDayTime, setIsDayTime] = useState(true);
 
+  // Fetch weather for the default city on initial load
   useEffect(() => {
     fetchWeather('Calgary');
   }, []);
 
   const fetchWeather = async (city = '', lat = null, lon = null) => {
-    const apiKey = process.env.NEXT_PUBLIC_OPENWEATHER_API_KEY;
-    if (!apiKey) {
-      console.error("API key not found. Make sure it's correctly set in .env.local");
-      setError('API key is missing. Please configure it in .env.local.');
-      return;
-    }
-
-    if (!city && !lat && !lon) return;
+    if (!city && !lat && !lon) return; // Avoid processing empty inputs
     setLoading(true);
     setError('');
-
-    let url = `https://api.openweathermap.org/data/2.5/onecall?appid=${apiKey}&units=metric`;
+    const apiKey = process.env.NEXT_PUBLIC_OPENWEATHER_API_KEY;
+    let url = `https://api.openweathermap.org/data/2.5/weather?appid=${apiKey}&units=metric`;
 
     if (lat && lon) {
       url += `&lat=${lat}&lon=${lon}`;
     } else if (city) {
-      const locationUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
-      try {
-        const locationResponse = await fetch(locationUrl);
-        if (!locationResponse.ok) {
-          throw new Error(`Location error: ${locationResponse.status} ${locationResponse.statusText}`);
-        }
-        const locationData = await locationResponse.json();
-        if (locationData.cod !== 200) {
-          throw new Error(locationData.message);
-        }
-        const { lat, lon } = locationData.coord;
-        url += `&lat=${lat}&lon=${lon}`;
-      } catch (error) {
-        console.error('Failed to fetch location data:', error);
-        setError(error.message);
-        setLoading(false);
-        return;
-      }
+      url += `&q=${city}`;
     }
 
     try {
       const response = await fetch(url);
-      if (!response.ok) {
-        throw new Error(`Weather data error: ${response.status} ${response.statusText}`);
-      }
       const data = await response.json();
-      if (data.cod && data.cod !== 200) {
+      if (data.cod !== 200) {
         throw new Error(data.message);
       }
-      setWeatherData(data);
-      checkDayTime(data.current);
+      const processedData = {
+        location: `${data.name}, ${data.sys.country}`,
+        icon: data.weather[0].icon,
+        temperature: Math.round(data.main.temp),
+        condition: data.weather[0].description,
+        feels_like: Math.round(data.main.feels_like),
+        humidity: data.main.humidity,
+        wind_speed: Math.round(data.wind.speed),
+        wind_deg: data.wind.deg,
+        high: Math.round(data.main.temp_max),
+        low: Math.round(data.main.temp_min),
+        pressure: data.main.pressure,
+        sunrise: new Date(data.sys.sunrise * 1000),
+        sunset: new Date(data.sys.sunset * 1000),
+        cloudiness: data.clouds.all,
+        uv_index: 5, // Placeholder for UV index
+      };
+      setWeatherData(processedData);
+      checkDayTime(processedData);
     } catch (error) {
       console.error('Failed to fetch weather data:', error);
       setError(error.message);
@@ -75,11 +66,7 @@ export default function Page() {
     }
   };
 
-  const checkDayTime = (current) => {
-    const currentTime = new Date().getTime();
-    setIsDayTime(currentTime > current.sunrise * 1000 && currentTime < current.sunset * 1000);
-  };
-
+  // Handle click on location icon
   const handleLocationClick = () => {
     if (!navigator.geolocation) {
       alert('Geolocation is not supported by your browser');
@@ -88,7 +75,7 @@ export default function Page() {
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const { latitude, longitude } = position.coords;
-        fetchWeather('', latitude, longitude);
+        fetchWeather('', latitude, longitude); // Fetch weather using geolocation
       },
       (error) => {
         console.error('Geolocation error:', error);
@@ -97,19 +84,23 @@ export default function Page() {
     );
   };
 
+  const checkDayTime = (data) => {
+    const currentTime = new Date().getTime();
+    setIsDayTime(currentTime > data.sunrise.getTime() && currentTime < data.sunset.getTime());
+  };
+
   return (
-    <div className={`min-h-screen ${isDayTime ? 'bg-blue-200' : 'bg-gray-800'} text-gray-900`}>
+    <div className={`min-h-screen ${isDayTime ? 'bg-blue-200' : 'bg-gray-800'} transition-colors duration-500`}>
       <Header />
-      <div className="container mx-auto px-6 py-8">
+      <WeatherAlert alertMessage="Severe Thunderstorm Watch" />
+      <div className="container mx-auto px-6">
         <SearchBar onSearch={(city) => fetchWeather(city)} onLocationClick={handleLocationClick} />
         {loading && <p className="text-center mt-4">Loading...</p>}
         {error && <p className="text-center text-red-500">{error}</p>}
         {weatherData && (
           <>
-            <WeatherDetails details={weatherData.current} />
-            <HourlyForecast data={weatherData.hourly} />
-            <DailyForecast data={weatherData.daily} />
-            <News /> {/* Add the News component */}
+            <MainWeatherDisplay weatherData={weatherData} />
+            <WeatherDetails details={weatherData} />
           </>
         )}
       </div>
