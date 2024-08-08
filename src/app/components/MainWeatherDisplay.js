@@ -1,30 +1,29 @@
-// src/app/components/MainWeatherDisplay.js
+import { motion } from 'framer-motion';
+import React from 'react';
 
-export default function MainWeatherDisplay({ weatherData }) {
+export default function MainWeatherDisplay({ weatherData, isDayTime }) {
+  const textColor = isDayTime ? 'text-black' : 'text-white';
+
   return (
-    <div className="bg-blue-100 py-10 animate-fade-in">
-      <div className="container mx-auto px-6">
-        <h2 className="text-xl font-bold text-gray-700">{weatherData.location}</h2>
-        <div className="flex justify-between items-center mt-4">
-          <div className="flex items-center">
-            <img
-              src={`https://openweathermap.org/img/wn/${weatherData.icon}@2x.png`}
-              alt={weatherData.condition}
-              className="w-20 h-20"
-            />
-            <div className="ml-4">
-              <p className="text-3xl font-semibold">{weatherData.temperature}°C</p>
-              <p className="text-gray-700 capitalize">{weatherData.condition}</p>
-              <p className="text-sm text-gray-500">Feels like: {weatherData.feels_like}°C</p>
-            </div>
-          </div>
-          <div className="bg-white p-4 rounded-lg shadow-lg">
-            <p><strong>Humidity:</strong> {weatherData.humidity}%</p>
-            <p><strong>Pressure:</strong> {weatherData.pressure} hPa</p>
-            <p><strong>Visibility:</strong> {weatherData.visibility} km</p>
-          </div>
-        </div>
-      </div>
-    </div>
+    <motion.div
+      className="text-center mt-6"
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      <h2 className={`text-3xl ${textColor}`}>{weatherData.location}</h2>
+      <motion.div className={`text-6xl ${textColor}`} animate={{ scale: [1, 1.2, 1] }} transition={{ repeat: Infinity, duration: 2 }}>
+        {weatherData.temperature}°C
+      </motion.div>
+      <div className={`text-xl ${textColor}`}>{weatherData.condition}</div>
+      <motion.img
+        src={`http://openweathermap.org/img/wn/${weatherData.icon}@2x.png`}
+        alt="Weather Icon"
+        className="mx-auto"
+        initial={{ scale: 0.8 }}
+        animate={{ scale: 1 }}
+        transition={{ duration: 0.5 }}
+      />
+    </motion.div>
   );
 }

@@ -1,4 +1,3 @@
-//NEXT_PUBLIC_OPENWEATHER_API_KEY=317d523e7baf48190e64744267239a4
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -14,13 +13,22 @@ export default function Page() {
   const [error, setError] = useState('');
   const [isDayTime, setIsDayTime] = useState(true);
 
-  // Fetch weather for the default city on initial load
   useEffect(() => {
-    fetchWeather('Calgary');
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        fetchWeather('', latitude, longitude);
+      },
+      (error) => {
+        console.error('Geolocation error:', error);
+        setError('Unable to retrieve your location');
+        fetchWeather('Calgary'); // Fallback to Calgary if geolocation fails
+      }
+    );
   }, []);
 
   const fetchWeather = async (city = '', lat = null, lon = null) => {
-    if (!city && !lat && !lon) return; // Avoid processing empty inputs
+    if (!city && !lat && !lon) return;
     setLoading(true);
     setError('');
     const apiKey = process.env.NEXT_PUBLIC_OPENWEATHER_API_KEY;
@@ -53,7 +61,7 @@ export default function Page() {
         sunrise: new Date(data.sys.sunrise * 1000),
         sunset: new Date(data.sys.sunset * 1000),
         cloudiness: data.clouds.all,
-        uv_index: 5, // Placeholder for UV index
+        uv_index: 5,
       };
       setWeatherData(processedData);
       checkDayTime(processedData);
@@ -66,7 +74,6 @@ export default function Page() {
     }
   };
 
-  // Handle click on location icon
   const handleLocationClick = () => {
     if (!navigator.geolocation) {
       alert('Geolocation is not supported by your browser');
@@ -75,7 +82,7 @@ export default function Page() {
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const { latitude, longitude } = position.coords;
-        fetchWeather('', latitude, longitude); // Fetch weather using geolocation
+        fetchWeather('', latitude, longitude);
       },
       (error) => {
         console.error('Geolocation error:', error);
@@ -99,7 +106,7 @@ export default function Page() {
         {error && <p className="text-center text-red-500">{error}</p>}
         {weatherData && (
           <>
-            <MainWeatherDisplay weatherData={weatherData} />
+            <MainWeatherDisplay weatherData={weatherData} isDayTime={isDayTime} />
             <WeatherDetails details={weatherData} />
           </>
         )}

@@ -30,11 +30,11 @@ export async function fetchWeatherData(city = '', lat = null, lon = null) {
     humidity: data.main.humidity,
     wind_speed: Math.round(data.wind.speed),
     wind_deg: data.wind.deg,
-    uv_index: data.main.temp, // Placeholder for UV Index
+    high: Math.round(data.main.temp_max),
+    pressure: data.main.pressure,
     sunrise: new Date(data.sys.sunrise * 1000),
     sunset: new Date(data.sys.sunset * 1000),
-    pressure: data.main.pressure,
-    cloudiness: data.clouds.all, // Additional field
-    icon: data.weather[0].icon, // Weather icon
+    cloudiness: data.clouds.all,
+    uv_index: 5, // Placeholder for UV index
   };
 }

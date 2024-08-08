@@ -1,36 +1,43 @@
 // src/app/components/SearchBar.js
-import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import React from 'react';
 
 export default function SearchBar({ onSearch, onLocationClick }) {
-  const [city, setCity] = useState('');
+  const [city, setCity] = React.useState('');
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    onSearch(city);
-    setCity('');
+  const handleSearch = () => {
+    if (city.trim()) {
+      onSearch(city);
+      setCity('');
+    }
   };
 
   return (
-    <div className="flex justify-center items-center mb-6">
-      <input
+    <div className="flex justify-center mt-4">
+      <motion.input
         type="text"
         value={city}
         onChange={(e) => setCity(e.target.value)}
         placeholder="Enter city name"
-        className="px-4 py-2 border rounded-lg w-2/3"
+        className="px-4 py-2 border rounded-l-md"
+        whileFocus={{ scale: 1.05 }}
       />
-      <button
+      <motion.button
         onClick={handleSearch}
-        className="bg-blue-600 text-white px-4 py-2 rounded-lg ml-4 hover:bg-blue-700"
+        className="px-4 py-2 bg-blue-500 text-white rounded-r-md"
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
       >
         Search
-      </button>
-      <button
+      </motion.button>
+      <motion.button
         onClick={onLocationClick}
-        className="bg-green-600 text-white px-4 py-2 rounded-lg ml-4 hover:bg-green-700"
+        className="ml-2 px-4 py-2 bg-green-500 text-white rounded-md"
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
       >
         Use Current Location
-      </button>
+      </motion.button>
     </div>
   );
 }
