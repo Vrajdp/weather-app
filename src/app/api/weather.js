@@ -37,6 +37,6 @@ export async function fetchWeatherData(city = '', lat = null, lon = null) {
     sunrise: new Date(data.sys.sunrise * 1000),
     sunset: new Date(data.sys.sunset * 1000),
     cloudiness: data.clouds.all,
-    uv_index: 5, // Placeholder for UV index
+    uv_index: 5, 
   };
 }

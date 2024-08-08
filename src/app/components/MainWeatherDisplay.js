@@ -12,7 +12,11 @@ export default function MainWeatherDisplay({ weatherData, isDayTime }) {
       transition={{ duration: 0.5 }}
     >
       <h2 className={`text-3xl ${textColor}`}>{weatherData.location}</h2>
-      <motion.div className={`text-6xl ${textColor}`} animate={{ scale: [1, 1.2, 1] }} transition={{ repeat: Infinity, duration: 2 }}>
+      <motion.div 
+        className={`text-6xl ${textColor}`} 
+        animate={{ scale: [1, 1.2, 1] }} 
+        transition={{ repeat: Infinity, duration: 2 }} 
+      >
         {weatherData.temperature}°C
       </motion.div>
       <div className={`text-xl ${textColor}`}>{weatherData.condition}</div>

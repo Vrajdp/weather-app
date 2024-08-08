@@ -1,4 +1,4 @@
-// src/app/components/WeatherAlert.js
+
 import React from 'react';
 
 export default function WeatherAlert({ alertMessage }) {

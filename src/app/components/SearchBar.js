@@ -7,7 +7,7 @@ export default function SearchBar({ onSearch, onLocationClick }) {
   const handleSearch = () => {
     if (city.trim()) {
       onSearch(city);
-      setCity(''); // Reset the input field
+      setCity('');
     }
   };
 
