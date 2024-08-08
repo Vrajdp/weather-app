@@ -6,6 +6,7 @@ import SearchBar from './components/SearchBar';
 import WeatherAlert from './components/WeatherAlert';
 import MainWeatherDisplay from './components/MainWeatherDisplay';
 import WeatherDetails from './components/WeatherDetails';
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export default function Page() {
   const [weatherData, setWeatherData] = useState(null);
