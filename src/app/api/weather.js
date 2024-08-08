@@ -24,6 +24,7 @@ export async function fetchWeatherData(city = '', lat = null, lon = null) {
 
   return {
     location: `${data.name}, ${data.sys.country}`,
+    icon: data.weather[0].icon,
     temperature: Math.round(data.main.temp),
     condition: data.weather[0].description,
     feels_like: Math.round(data.main.feels_like),
@@ -31,6 +32,7 @@ export async function fetchWeatherData(city = '', lat = null, lon = null) {
     wind_speed: Math.round(data.wind.speed),
     wind_deg: data.wind.deg,
     high: Math.round(data.main.temp_max),
+    low: Math.round(data.main.temp_min),
     pressure: data.main.pressure,
     sunrise: new Date(data.sys.sunrise * 1000),
     sunset: new Date(data.sys.sunset * 1000),
