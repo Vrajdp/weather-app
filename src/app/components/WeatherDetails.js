@@ -20,17 +20,17 @@ export default function WeatherDetails({ details }) {
 
   return (
     <motion.div
-      className="bg-white p-6 rounded-lg shadow-lg mt-6 animate-fade-in"
+      className="bg-white p-4 rounded-lg shadow-lg mt-6 animate-fade-in"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <div className="text-center text-lg font-semibold mb-6">
+      <div className="text-center text-lg font-semibold mb-4">
         {details.location} - {details.temperature}°C, {details.condition}
       </div>
-      <div className="flex flex-wrap justify-around items-center">
-        <motion.div className="w-full md:w-1/2 lg:w-1/3 p-4" whileHover={{ scale: 1.05 }}>
-          <p className="text-center font-bold mb-2">Temperature Details</p>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <motion.div className="p-4" whileHover={{ scale: 1.05 }}>
+          <p className="text-center font-bold">Temperature Details</p>
           <div className="bg-blue-100 p-4 rounded-lg">
             <p>Feels Like: {details.feels_like}°C</p>
             <p>Humidity: {details.humidity}%</p>
@@ -38,8 +38,8 @@ export default function WeatherDetails({ details }) {
           </div>
         </motion.div>
 
-        <motion.div className="w-full md:w-1/2 lg:w-1/3 p-4" whileHover={{ scale: 1.05 }}>
-          <p className="text-center font-bold mb-2">Wind</p>
+        <motion.div className="p-4" whileHover={{ scale: 1.05 }}>
+          <p className="text-center font-bold">Wind</p>
           <div className="bg-blue-100 p-4 rounded-lg">
             <p>Speed: {details.wind_speed} km/h</p>
             <p>Direction: {direction}</p>
@@ -56,8 +56,8 @@ export default function WeatherDetails({ details }) {
           </div>
         </motion.div>
 
-        <motion.div className="w-full md:w-1/2 lg:w-1/3 p-4" whileHover={{ scale: 1.05 }}>
-          <p className="text-center font-bold mb-2">Pressure</p>
+        <motion.div className="p-4" whileHover={{ scale: 1.05 }}>
+          <p className="text-center font-bold">Pressure</p>
           <div className="bg-blue-100 p-4 rounded-lg">
             <div className="relative w-full bg-gray-200 rounded-full h-4 overflow-hidden">
               <motion.div
@@ -71,14 +71,14 @@ export default function WeatherDetails({ details }) {
           </div>
         </motion.div>
 
-        <motion.div className="w-full md:w-1/2 lg:w-1/3 p-4" whileHover={{ scale: 1.05 }}>
-          <p className="text-center font-bold mb-2">UV Index</p>
+        <motion.div className="p-4" whileHover={{ scale: 1.05 }}>
+          <p className="text-center font-bold">UV Index</p>
           <div className="bg-blue-100 p-4 rounded-lg">
             <div className="relative w-full bg-gray-200 rounded-full h-4 overflow-hidden">
               <motion.div
                 className={`absolute top-0 left-0 h-full ${uvColor()}`}
                 initial={{ width: 0 }}
-                animate={{ width: `${(uvIndex / 11) * 100}%` }}
+                animate={{ width: `${(uvIndex / 11) * 100}%` }} // Assuming a scale from 0 to 11
                 transition={{ duration: 1 }}
               ></motion.div>
             </div>
@@ -86,8 +86,8 @@ export default function WeatherDetails({ details }) {
           </div>
         </motion.div>
 
-        <motion.div className="w-full md:w-1/2 lg:w-1/3 p-4" whileHover={{ scale: 1.05 }}>
-          <p className="text-center font-bold mb-2">Sunrise & Sunset</p>
+        <motion.div className="p-4" whileHover={{ scale: 1.05 }}>
+          <p className="text-center font-bold">Sunrise & Sunset</p>
           <div className="bg-blue-100 p-4 rounded-lg">
             <p>Sunrise: {details.sunrise.toLocaleTimeString()}</p>
             <p>Sunset: {details.sunset.toLocaleTimeString()}</p>

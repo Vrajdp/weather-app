@@ -1,4 +1,3 @@
-// src/app/components/SearchBar.js
 import { motion } from 'framer-motion';
 import React from 'react';
 
@@ -8,7 +7,7 @@ export default function SearchBar({ onSearch, onLocationClick }) {
   const handleSearch = () => {
     if (city.trim()) {
       onSearch(city);
-      setCity('');
+      setCity(''); // Reset the input field
     }
   };
 
